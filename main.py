@@ -9,14 +9,30 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 import os
-driver = webdriver.ChromeOptions()
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+# Configure Chrome options
+chrome_options = Options()
+chrome_options.add_argument("--headless")  # Run in headless mode, if needed
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
+
+# Initialize the Chrome WebDriver with the options
+driver = webdriver.Chrome(options=chrome_options)
+
+# Assert the browser name from the capabilities
 assert driver.capabilities['browserName'] == 'chrome'
 
-driver = webdriver.ChromeOptions()
-driver.browser_version = 'stable'
-assert driver.capabilities['browserVersion'] == 'stable'
+# Optionally, assert the browser version
+assert driver.capabilities['browserVersion'] == '131.0.6778.264'  # Replace with your actual Chrome version
 
+# Visit the desired URL
 driver.get("http://localhost:5173/")
+
+# Perform any necessary actions on the page, e.g., interacting with elements
+# driver.quit() # Don't forget to quit the driver after the test to close the browser
+
 
 # Log in
 input_element = driver.find_element(By.CLASS_NAME, 'input_field1')
