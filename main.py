@@ -14,17 +14,9 @@ chrome_options.add_argument("--headless")  # Run in headless mode
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
 
-    # Define the path to ChromeDriver
-chromedriver_path = "/usr/local/bin/chromedriver"
-    
-    # Check if ChromeDriver is installed at the specified path
-if not os.path.exists(chromedriver_path):
-   raise Exception(f"ChromeDriver not found at {chromedriver_path}")
-
-    # Set up the ChromeDriver service
-chrome_service = Service(chromedriver_path)
-
+chrome_service = Service("/usr/local/bin/chromedriver")  # Path to your chromedriver
 driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
+    
 driver.maximize_window()
 driver.get("http://localhost:5173/")
 
