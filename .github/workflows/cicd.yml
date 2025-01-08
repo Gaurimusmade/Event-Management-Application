@@ -44,11 +44,11 @@ jobs:
       
           # Download the correct ChromeDriver version and unzip it
           # wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -P /tmp
-          unzip /tmp/chromedriver_linux64.zip -d /usr/local/bin/
-          rm /tmp/chromedriver_linux64.zip
+          # unzip /tmp/chromedriver_linux64.zip -d /usr/local/bin/
+          # rm /tmp/chromedriver_linux64.zip
       
           # Verify installation by printing the ChromeDriver version
-          /usr/local/bin/chromedriver --version
+          # /usr/local/bin/chromedriver --version
 
       # Step 4: Run Selenium tests
       - name: Run Selenium Tests and Generate Report
