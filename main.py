@@ -9,12 +9,12 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 import os
-options = webdriver.ChromeOptions()
-assert options.capabilities['browserName'] == 'chrome'
+driver = webdriver.ChromeOptions()
+assert driver.capabilities['browserName'] == 'chrome'
 
-options = webdriver.ChromeOptions()
-options.browser_version = 'stable'
-assert options.capabilities['browserVersion'] == 'stable'
+driver = webdriver.ChromeOptions()
+driver.browser_version = 'stable'
+assert driver.capabilities['browserVersion'] == 'stable'
 
 driver.get("http://localhost:5173/")
 
