@@ -25,7 +25,7 @@ driver = webdriver.Chrome(options=chrome_options)
 assert driver.capabilities['browserName'] == 'chrome'
 
 # Optionally, assert the browser version
-assert driver.capabilities['browserVersion'] == '131.0.6778.264'  # Replace with your actual Chrome version
+assert driver.capabilities['browserVersion'] == 'stable'  # Replace with your actual Chrome version
 
 # Visit the desired URL
 driver.get("http://localhost:5173/")
