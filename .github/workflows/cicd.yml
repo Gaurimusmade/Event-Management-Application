@@ -26,21 +26,21 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           
-      - name: Install Google Chrome
-        run: |
-          wget "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" -P /tmp
-          sudo apt install /tmp/google-chrome-stable_current_amd64.deb -y
-          google-chrome --version  # Check if Chrome is installed
+      # - name: Install Google Chrome
+      #   run: |
+      #     wget "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" -P /tmp
+      #     sudo apt install /tmp/google-chrome-stable_current_amd64.deb -y
+      #     google-chrome --version  # Check if Chrome is installed
       
-      - name: Install ChromeDriver (Specific Version)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget unzip
-          wget https://chromedriver.storage.googleapis.com/73.0.3683.20/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/local/bin/
-          sudo chmod +x /usr/local/bin/chromedriver
-          chromedriver --version
+      # - name: Install ChromeDriver (Specific Version)
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y wget unzip
+      #     wget https://chromedriver.storage.googleapis.com/73.0.3683.20/chromedriver_linux64.zip
+      #     unzip chromedriver_linux64.zip
+      #     sudo mv chromedriver /usr/local/bin/
+      #     sudo chmod +x /usr/local/bin/chromedriver
+      #     chromedriver --version
 
       # Step 4: Run Selenium tests
       - name: Run Selenium Tests and Generate Report
