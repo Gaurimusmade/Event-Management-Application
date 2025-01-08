@@ -25,38 +25,27 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-
+          
       - name: Install ChromeDriver (Specific Version)
         run: |
           # Update apt and install necessary dependencies
           sudo apt-get update
           sudo apt-get install -y wget unzip
       
-          # Set the specific ChromeDriver version
-          CHROMEDRIVER_VERSION="131.0.6778.205"
-          
-          # Debug: Print the URL being fetched
-          echo "Downloading ChromeDriver version ${CHROMEDRIVER_VERSION}..."
+          # Get installed Chrome version
+          CHROME_VERSION=$(google-chrome --version | grep -oP '[0-9]+(\.[0-9]+)*')
       
-          # Use verbose mode for wget to debug the error
-          wget -v "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -P /tmp
-          
-          # Check if wget was successful
-          if [ $? -ne 0 ]; then
-            echo "Error: Failed to download ChromeDriver"
-            exit 1
-          fi
-          
-          # Unzip ChromeDriver to the correct location
+          # Match Chrome version with the corresponding ChromeDriver version
+          CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%.*}")
+      
+          # Download and install ChromeDriver
+          wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -P /tmp
           unzip /tmp/chromedriver_linux64.zip -d /usr/local/bin/
-          
-          # Clean up
           rm /tmp/chromedriver_linux64.zip
-          
+      
           # Verify installation by printing the ChromeDriver version
           /usr/local/bin/chromedriver --version
-
-
+      
       # Step 4: Run Selenium tests
       - name: Run Selenium Tests and Generate Report
         run: |
