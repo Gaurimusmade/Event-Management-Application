@@ -10,20 +10,14 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
 
-    # Set Chrome options for headless mode and other flags
-chrome_options = Options()
-chrome_options.add_argument("--headless")  # Run in headless mode
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
-
-    # Specify path to ChromeDriver and initialize the driver with service
-chrome_service = Service("/usr/local/bin/chromedriver")  # Path to ChromeDriver
-
-    # Initialize WebDriver with service and options
-driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
-
-    # Maximize window (optional, since headless mode doesn't show UI)
-driver.maximize_window()
+options = Options()
+options.binary_location = "C:\\path\\to\\chrome.exe"    #chrome binary location specified here
+options.add_argument("--start-maximized") #open Browser in maximized mode
+options.add_argument("--no-sandbox") #bypass OS security model
+options.add_argument("--disable-dev-shm-usage") #overcome limited resource problems
+options.add_experimental_option("excludeSwitches", ["enable-automation"])
+options.add_experimental_option('useAutomationExtension', False)
+driver = webdriver.Chrome(options=options, executable_path=r'C:\path\to\chromedriver.exe')
 
 
 # Initialize WebDriver
