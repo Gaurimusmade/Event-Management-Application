@@ -28,6 +28,8 @@ jobs:
           
       - name: Install Google Chrome
         run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip
           wget "https://storage.googleapis.com/chrome-for-testing-public/131.0.6778.264/linux64/chrome-linux64.zip" -P /tmp
           unzip /tmp/chrome-linux64.zip -d /tmp
           sudo mv /tmp/chrome /opt/google-chrome
