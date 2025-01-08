@@ -37,9 +37,9 @@ jobs:
           
           # Debug: Print the URL being fetched
           echo "Downloading ChromeDriver version ${CHROMEDRIVER_VERSION}..."
-          
-          # Download ChromeDriver (corrected URL)
-          wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -P /tmp
+      
+          # Use verbose mode for wget to debug the error
+          wget -v "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -P /tmp
           
           # Check if wget was successful
           if [ $? -ne 0 ]; then
