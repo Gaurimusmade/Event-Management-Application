@@ -32,19 +32,20 @@ jobs:
           sudo apt-get install -y wget unzip
           wget "https://storage.googleapis.com/chrome-for-testing-public/131.0.6778.264/linux64/chrome-linux64.zip" -P /tmp
           unzip /tmp/chrome-linux64.zip -d /tmp
-          sudo mv /tmp/chrome /opt/google-chrome
+          sudo mv /tmp/chrome-linux64 /opt/google-chrome  # Adjusted folder name
           sudo ln -s /opt/google-chrome/chrome /usr/local/bin/google-chrome
           google-chrome --version  # Check if Chrome is installed
-    
+      
       - name: Install ChromeDriver
         run: |
           sudo apt-get update
           sudo apt-get install -y wget unzip
           wget "https://storage.googleapis.com/chrome-for-testing-public/131.0.6778.264/linux64/chromedriver-linux64.zip" -P /tmp
           unzip /tmp/chromedriver-linux64.zip -d /tmp
-          sudo mv /tmp/chromedriver /usr/local/bin/
+          sudo mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/  # Adjusted folder name
           sudo chmod +x /usr/local/bin/chromedriver
           chromedriver --version  # Check if ChromeDriver is installed
+
 
       # Step 4: Run Selenium tests
       - name: Run Selenium Tests and Generate Report
