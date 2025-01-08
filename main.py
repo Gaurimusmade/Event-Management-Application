@@ -9,15 +9,13 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 import os
-chrome_options = Options()
-chrome_options.add_argument("--headless")  # Run in headless mode
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
+options = webdriver.ChromeOptions()
+assert options.capabilities['browserName'] == 'chrome'
 
-chrome_service = Service("/usr/local/bin/chromedriver")  # Path to your chromedriver
-driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
-    
-driver.maximize_window()
+options = webdriver.ChromeOptions()
+options.browser_version = 'stable'
+assert options.capabilities['browserVersion'] == 'stable'
+
 driver.get("http://localhost:5173/")
 
 # Log in
