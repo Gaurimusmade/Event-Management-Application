@@ -52,5 +52,5 @@ jobs:
       # Step 4: Run Selenium tests
       - name: Run Selenium Tests and Generate Report
         run: |
-          cd Smart-Collect-Selenium
+          cd Selenium
           python main.py 
