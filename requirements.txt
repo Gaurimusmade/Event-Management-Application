@@ -1,0 +1,6 @@
+pytest
+selenium
+openpyxl
+unittest-xml-reporting
+python-dotenv
+chromedriver
