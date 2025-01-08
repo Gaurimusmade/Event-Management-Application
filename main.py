@@ -12,11 +12,25 @@ import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
+# Set Chrome options
 options = Options()
-driver = webdriver.Chrome(options=options)
-    
-# Assert browser name from capabilities
-assert driver.capabilities['browserName'] == 'chrome'
+options.add_argument('--headless')  # Run Chrome in headless mode (optional)
+options.add_argument('--no-sandbox')  # Required for some Linux environments
+options.add_argument('--disable-dev-shm-usage')  # Overcome limited resource problems
+options.add_argument('--disable-gpu')  # Disable GPU rendering (optional)
+
+# Set ChromeDriver path (adjust path if necessary)
+chromedriver_path = '/usr/local/bin/chromedriver'
+
+# Initialize Chrome WebDriver
+service = Service(chromedriver_path)
+driver = webdriver.Chrome(service=service, options=options)
+
+# Verify the browser's name from capabilities
+assert driver.capabilities['browserName'] == 'chrome', "Browser is not Chrome!"
+
+# Print success message
+print("Successfully launched Chrome browser!")
 driver.get("http://localhost:5173/")
 
 # Perform any necessary actions on the page, e.g., interacting with elements
