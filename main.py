@@ -17,7 +17,7 @@ driver = webdriver.Chrome(service=service, options=options)
 
 try:
     # Open the local development server
-    url = "http://localhost:5173/"
+    url = "http://127.0.0.1:5173/"
     driver.get(url)
 
     # Print the title of the loaded page
