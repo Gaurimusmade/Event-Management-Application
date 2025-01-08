@@ -23,7 +23,7 @@ jobs:
       # Step 3: Install Selenium dependencies
       - name: Install Python dependencies
         run: |
-          cd Smart-Collect-Selenium
+          cd Selenium
           pip install --upgrade pip
           pip install -r requirements.txt
 
