@@ -12,22 +12,11 @@ import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-# Configure Chrome options
-chrome_options = Options()
-chrome_options.add_argument("--headless")  # Run in headless mode, if needed
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
-
-# Initialize the Chrome WebDriver with the options
-driver = webdriver.Chrome(options=chrome_options)
-
-# Assert the browser name from the capabilities
+options = Options()
+driver = webdriver.Chrome(options=options)
+    
+# Assert browser name from capabilities
 assert driver.capabilities['browserName'] == 'chrome'
-
-# Optionally, assert the browser version
-assert driver.capabilities['browserVersion'] == 'stable'  # Replace with your actual Chrome version
-
-# Visit the desired URL
 driver.get("http://localhost:5173/")
 
 # Perform any necessary actions on the page, e.g., interacting with elements
