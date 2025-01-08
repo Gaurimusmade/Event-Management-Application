@@ -28,19 +28,21 @@ jobs:
           
       - name: Install Google Chrome
         run: |
-          wget "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_114.0.5735.90_amd64.deb" -P /tmp
-          sudo apt install /tmp/google-chrome-stable_114.0.5735.90_amd64.deb -y
+          wget "https://storage.googleapis.com/chrome-for-testing-public/131.0.6778.264/linux64/chrome-linux64.zip" -P /tmp
+          unzip /tmp/chrome-linux64.zip -d /tmp
+          sudo mv /tmp/chrome /opt/google-chrome
+          sudo ln -s /opt/google-chrome/chrome /usr/local/bin/google-chrome
           google-chrome --version  # Check if Chrome is installed
-      
-      - name: Install ChromeDriver (Specific Version)
+    
+      - name: Install ChromeDriver
         run: |
           sudo apt-get update
           sudo apt-get install -y wget unzip
-          wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/local/bin/
+          wget "https://storage.googleapis.com/chrome-for-testing-public/131.0.6778.264/linux64/chromedriver-linux64.zip" -P /tmp
+          unzip /tmp/chromedriver-linux64.zip -d /tmp
+          sudo mv /tmp/chromedriver /usr/local/bin/
           sudo chmod +x /usr/local/bin/chromedriver
-          chromedriver --version
+          chromedriver --version  # Check if ChromeDriver is installed
 
       # Step 4: Run Selenium tests
       - name: Run Selenium Tests and Generate Report
