@@ -26,36 +26,30 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           
-      - name: Install ChromeDriver (Specific Version)
+      - name: Install Google Chrome and ChromeDriver
         run: |
           # Update apt and install necessary dependencies
           sudo apt-get update
           sudo apt-get install -y wget unzip
-      
-          # Get installed Chrome version
-          # CHROME_VERSION=$(google-chrome --version | grep -oP '[0-9]+(\.[0-9]+)*')
-      
-          # Match Chrome version with the corresponding ChromeDriver version
-          # CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%.*}")
-      
-          # Download and install Chrome
+          
+          # Download and install Google Chrome
           wget "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" -P /tmp
           sudo apt install /tmp/google-chrome-stable_current_amd64.deb -y
-
+          
+          # Get installed Chrome version
           CHROME_VERSION=$(google-chrome --version | grep -oP '[0-9]+(\.[0-9]+)*')
+      
+          # Match Chrome version with the corresponding ChromeDriver version
           CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%.*}")
           
+          # Download and install the matching ChromeDriver version
           wget "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -P /tmp
           unzip /tmp/chromedriver_linux64.zip -d /usr/local/bin/
           rm /tmp/chromedriver_linux64.zip
-
-          # Download the correct ChromeDriver version and unzip it
-          # wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -P /tmp
-          # unzip /tmp/chromedriver_linux64.zip -d /usr/local/bin/
-          # rm /tmp/chromedriver_linux64.zip
       
-          # Verify installation by printing the ChromeDriver version
-          # /usr/local/bin/chromedriver --version
+          # Verify installation
+          google-chrome --version
+          chromedriver --version
 
       # Step 4: Run Selenium tests
       - name: Run Selenium Tests and Generate Report
