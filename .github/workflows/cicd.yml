@@ -31,20 +31,29 @@ jobs:
           # Update apt and install necessary dependencies
           sudo apt-get update
           sudo apt-get install -y wget unzip
-
+      
           # Set the specific ChromeDriver version
           CHROMEDRIVER_VERSION="131.0.6778.205"
           
-          # Download ChromeDriver
-          wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
+          # Debug: Print the URL being fetched
+          echo "Downloading ChromeDriver version ${CHROMEDRIVER_VERSION}..."
+          
+          # Download ChromeDriver (corrected URL)
+          wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -P /tmp
+          
+          # Check if wget was successful
+          if [ $? -ne 0 ]; then
+            echo "Error: Failed to download ChromeDriver"
+            exit 1
+          fi
           
           # Unzip ChromeDriver to the correct location
-          unzip chromedriver_linux64.zip -d /usr/local/bin/
+          unzip /tmp/chromedriver_linux64.zip -d /usr/local/bin/
           
-          # Remove the zip file after extraction
-          rm chromedriver_linux64.zip
+          # Clean up
+          rm /tmp/chromedriver_linux64.zip
           
-          # Verify ChromeDriver installation by printing the version
+          # Verify installation by printing the ChromeDriver version
           /usr/local/bin/chromedriver --version
 
 
