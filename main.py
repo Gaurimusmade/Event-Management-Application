@@ -9,7 +9,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
-driver = webdriver.Chrome()
+ driver = webdriver.Chrome("/usr/bin/google-chrome")
 
 
 # Initialize WebDriver
