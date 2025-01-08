@@ -1,0 +1,56 @@
+name: CI/CD Pipeline for Smart Collect
+
+on:
+  push:
+    branches:
+      - master   # Trigger on pushes to the development branch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # Step 3: Install Selenium dependencies
+      - name: Install Python dependencies
+        run: |
+          cd Smart-Collect-Selenium
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install ChromeDriver (Specific Version)
+        run: |
+          # Update apt and install necessary dependencies
+          sudo apt-get update
+          sudo apt-get install -y wget unzip
+
+          # Set the specific ChromeDriver version
+          CHROMEDRIVER_VERSION="131.0.6778.205"
+          
+          # Download ChromeDriver
+          wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
+          
+          # Unzip ChromeDriver to the correct location
+          unzip chromedriver_linux64.zip -d /usr/local/bin/
+          
+          # Remove the zip file after extraction
+          rm chromedriver_linux64.zip
+          
+          # Verify ChromeDriver installation by printing the version
+          /usr/local/bin/chromedriver --version
+
+
+      # Step 4: Run Selenium tests
+      - name: Run Selenium Tests and Generate Report
+        run: |
+          cd Smart-Collect-Selenium
+          python main.py 
