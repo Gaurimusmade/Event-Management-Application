@@ -23,7 +23,6 @@ jobs:
       # Step 3: Install Selenium dependencies
       - name: Install Python dependencies
         run: |
-          cd Selenium
           pip install --upgrade pip
           pip install -r requirements.txt
 
@@ -52,5 +51,4 @@ jobs:
       # Step 4: Run Selenium tests
       - name: Run Selenium Tests and Generate Report
         run: |
-          cd Selenium
           python main.py 
