@@ -88,10 +88,3 @@ jobs:
 
           # Revert the PR changes and push to the main branch
           git revert -m 1 $(git log -n 1 --pretty=format:"%H")
-          git push origin main
-
-          # Create a revert PR
-          gh pr create \
-            --title "Revert PR for #${{ github.event.pull_request.number }}" \
-            --body "Reverting changes from PR #${{ github.event.pull_request.number }} due to failing tests." \
-           
