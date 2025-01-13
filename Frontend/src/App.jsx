@@ -10,6 +10,7 @@ const App = () => {
   return (
     <>
       <Navbar />
+      <h1>Hello Gauriiiiiiiiiii</h1>
       <Routes>
         <Route path="/" element={<EventDashboard />} />
         <Route path="/eventlist" element={<AllEvent />} />
