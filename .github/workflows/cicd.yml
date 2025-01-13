@@ -49,5 +49,10 @@ jobs:
 
       # Step 4: Run Selenium tests
       - name: Run Selenium Tests and Generate Report
+        env: 
+          GIT_USERNAME: Gaurimusmade
+          GIT_EMAIL: gaurimusmade27@gmail.com
         run: |
+          echo \$GIT_USERNAME
+          echo $GIT_EMAIL
           python main.py 
