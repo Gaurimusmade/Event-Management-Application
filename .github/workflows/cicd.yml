@@ -1,9 +1,13 @@
-name: CI/CD Pipeline for Smart Collect
+name: CI/CD Pipeline for Smart Collect (Pull Request)
 
 on:
-  push:
+  pull_request:
     branches:
-      - master   # Trigger on pushes to the development branch
+      - master   # Trigger on PRs targeting the master branch
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   test:
@@ -20,39 +24,81 @@ jobs:
         with:
           python-version: '3.9'
 
-      # Step 3: Install Selenium dependencies
+      # Step 3: Install Python dependencies
       - name: Install Python dependencies
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
           
+      # Step 4: Install Google Chrome
       - name: Install Google Chrome
         run: |
           sudo apt-get update
           sudo apt-get install -y wget unzip
           wget "https://storage.googleapis.com/chrome-for-testing-public/131.0.6778.264/linux64/chrome-linux64.zip" -P /tmp
           unzip /tmp/chrome-linux64.zip -d /tmp
-          sudo mv /tmp/chrome-linux64 /opt/google-chrome  # Adjusted folder name
+          sudo mv /tmp/chrome-linux64 /opt/google-chrome
           sudo ln -s /opt/google-chrome/chrome /usr/local/bin/google-chrome
-          google-chrome --version  # Check if Chrome is installed
+          google-chrome --version
       
+      # Step 5: Install ChromeDriver
       - name: Install ChromeDriver
         run: |
           sudo apt-get update
           sudo apt-get install -y wget unzip
           wget "https://storage.googleapis.com/chrome-for-testing-public/131.0.6778.264/linux64/chromedriver-linux64.zip" -P /tmp
           unzip /tmp/chromedriver-linux64.zip -d /tmp
-          sudo mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/  # Adjusted folder name
+          sudo mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/
           sudo chmod +x /usr/local/bin/chromedriver
-          chromedriver --version  # Check if ChromeDriver is installed
+          chromedriver --version
 
-
-      # Step 4: Run Selenium tests
+      # Step 6: Run Selenium Tests and Generate Report
       - name: Run Selenium Tests and Generate Report
         env: 
           GIT_USERNAME: Gaurimusmade
           GIT_EMAIL: gaurimusmade27@gmail.com
         run: |
-          echo \$GIT_USERNAME
-          echo $GIT_EMAIL
-          python main.py 
+          echo "Configuring Git..."
+          git config --global user.name "$GIT_USERNAME"
+          git config --global user.email "$GIT_EMAIL"
+
+          echo "Running Selenium tests..."
+          python main.py
+
+          echo "Generating report..."
+          mkdir -p reports
+          cp Test_Execution_Report.xlsx reports/
+
+      # Step 7: Upload Test Report
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: selenium-test-report
+          path: reports/Test_Execution_Report.xlsx
+
+      # Step 8: Fail, Revert PR, and Create Revert Request
+      - name: Fail, Revert, and Create Revert PR
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Tests failed. Reverting pull request..."
+
+          # Add a comment to the failing PR
+          gh pr comment ${{ github.event.pull_request.number }} --body "🚨 Tests failed. This PR will be reverted and a revert PR will be created automatically."
+
+          # Close the failing PR
+          gh pr close ${{ github.event.pull_request.number }}
+
+          # Check out the branch and revert the changes
+          git checkout master
+          git pull origin master
+          git revert -m 1 $(git log -n 1 --pretty=format:"%H")
+          git push origin master
+
+          # Create a revert PR
+          gh pr create \
+            --title "Revert PR for #${{ github.event.pull_request.number }}" \
+            --body "Reverting changes from #${{ github.event.pull_request.number }} due to failing tests." \
+            --base master \
+            --head master
