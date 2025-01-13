@@ -94,5 +94,4 @@ jobs:
           gh pr create \
             --title "Revert PR for #${{ github.event.pull_request.number }}" \
             --body "Reverting changes from PR #${{ github.event.pull_request.number }} due to failing tests." \
-            --base main \  # Change to 'main' if 'main' is your default branch
-            --head $BRANCH_NAME
+           
