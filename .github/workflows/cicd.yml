@@ -65,17 +65,6 @@ jobs:
           echo "Running Selenium tests..."
           python main.py
 
-          echo "Generating report..."
-          mkdir -p reports
-          cp Test_Execution_Report.xlsx reports/
-
-      # Step 7: Upload Test Report
-      - name: Upload Test Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: selenium-test-report
-          path: reports/Test_Execution_Report.xlsx
-
       # Step 8: Fail, Revert PR, and Create Revert Request
       - name: Fail, Revert, and Create Revert PR
         if: failure()
