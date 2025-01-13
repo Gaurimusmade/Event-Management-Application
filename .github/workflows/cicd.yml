@@ -82,9 +82,5 @@ jobs:
           # Fetch the branch name from the event
           BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
 
-          # Check out the default branch (adjust for your repository's default branch)
-          git checkout master  # Replace 'main' with 'master' if that's your default branch
-          git pull origin master  # Replace 'main' with your default branch
-
           # Revert the PR changes and push to the main branch
           git revert -m 1 $(git log -n 1 --pretty=format:"%H")
