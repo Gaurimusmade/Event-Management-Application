@@ -65,29 +65,34 @@ jobs:
           echo "Running Selenium tests..."
           python main.py
 
-      # Step 8: Fail, Revert PR, and Create Revert Request
-      - name: Fail, Revert, and Create Revert PR
-        if: failure()
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Check if tests failed
+      - name: Check test results and revert PR if failed
+        if: failure()  # Only run this if the tests fail
         run: |
-          echo "Tests failed. Reverting pull request..."
+          # Set up GitHub CLI
+          echo "Setting up GitHub CLI"
+          sudo apt-get install gh
 
-          # Add a comment to the failing PR
-          gh pr comment ${{ github.event.pull_request.number }} --body "🚨 Tests failed. This PR will be reverted and a revert PR will be created automatically."
+          # Authenticate with GitHub CLI (use GitHub token for authentication)
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
           # Close the failing PR
           gh pr close ${{ github.event.pull_request.number }}
 
-          # Check out the branch and revert the changes
-          git checkout master
-          git pull origin master
+          # Fetch the branch name from the event
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+
+          # Check out the default branch (adjust for your repository's default branch)
+          git checkout main  # Replace 'main' with 'master' if that's your default branch
+          git pull origin main  # Replace 'main' with your default branch
+
+          # Revert the PR changes and push to the main branch
           git revert -m 1 $(git log -n 1 --pretty=format:"%H")
-          git push origin master
+          git push origin main
 
           # Create a revert PR
           gh pr create \
             --title "Revert PR for #${{ github.event.pull_request.number }}" \
-            --body "Reverting changes from #${{ github.event.pull_request.number }} due to failing tests." \
-            --base master \
-            --head master
+            --body "Reverting changes from PR #${{ github.event.pull_request.number }} due to failing tests." \
+            --base main \  # Change to 'main' if 'main' is your default branch
+            --head $BRANCH_NAME
