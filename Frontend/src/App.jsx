@@ -12,6 +12,7 @@ const App = () => {
       <Navbar />
       <h1>Hello How are you?</h1>
       <h1>Hello Gauriiiiiiiiiii</h1>
+      <h1>ALL GOOD</h1>
       <h1>Hello World</h1>
       <Routes>
         <Route path="/" element={<EventDashboard />} />
@@ -22,6 +23,7 @@ const App = () => {
       </Routes>
       <Footer />
       <h1>Hello Gauriiiiiiiiiii from master</h1>
+      <h1>Hello 1234</h1>
     </>
   );
 };
