@@ -3,14 +3,14 @@ name: CI/CD Pipeline for Smart Collect (Pull Request)
 on:
   pull_request:
     branches:
-      - master   # Trigger on PRs targeting the master branch
+      - master  # Trigger on PRs targeting the master branch
     types:
       - opened
       - synchronize
       - reopened
 
 jobs:
-  test:
+  ci_cd_pipeline:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,19 +18,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Python
+      # Step 3: Merge the PR
+      - name: Merge Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Merging the PR..."
+          gh pr merge ${{ github.event.pull_request.number }} --merge --admin
+      
+      # Step 4: Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
-      # Step 3: Install Python dependencies
+      # Step 5: Install Python dependencies
       - name: Install Python dependencies
         run: |
           pip install --upgrade pip
-          # pip install -r requirements.txt
-          
-      # Step 4: Install Google Chrome
+          pip install -r requirements.txt
       - name: Install Google Chrome
         run: |
           sudo apt-get update
@@ -40,8 +46,8 @@ jobs:
           sudo mv /tmp/chrome-linux64 /opt/google-chrome
           sudo ln -s /opt/google-chrome/chrome /usr/local/bin/google-chrome
           google-chrome --version
-      
-      # Step 5: Install ChromeDriver
+
+      # Step 7: Install ChromeDriver
       - name: Install ChromeDriver
         run: |
           sudo apt-get update
@@ -52,35 +58,25 @@ jobs:
           sudo chmod +x /usr/local/bin/chromedriver
           chromedriver --version
 
-      # Step 6: Run Selenium Tests and Generate Report
-      - name: Run Selenium Tests and Generate Report
+      # Step 8: Run Selenium Tests
+      - name: Run Selenium Tests
         env: 
           GIT_USERNAME: Gaurimusmade
           GIT_EMAIL: gaurimusmade27@gmail.com
         run: |
-          echo "Configuring Git..."
-          git config --global user.name "$GIT_USERNAME"
-          git config --global user.email "$GIT_EMAIL"
-
           echo "Running Selenium tests..."
           python main.py
 
-      # Check if tests failed
-      - name: Check test results and revert PR if failed
-        if: failure()  # Only run this if the tests fail
+      # Step 9: Revert the PR if Selenium Tests Fail
+      - name: Revert PR if tests failed
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Set up GitHub CLI
-          echo "Setting up GitHub CLI"
-          sudo apt-get install gh
+          echo "Tests failed. Reverting the merged PR..."
 
-          # Authenticate with GitHub CLI (use GitHub token for authentication)
-          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
-
-          # Close the failing PR
-          gh pr close ${{ github.event.pull_request.number }}
-
-          # Fetch the branch name from the event
-          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-
-          # Revert the PR changes and push to the main branch
-          git revert -m 1 $(git log -n 1 --pretty=format:"%H")
+          # Revert the merge commit
+          git fetch origin master
+          git checkout master
+          git revert -m 1 $(git log -n 1 --pretty=format:"%H") --no-edit
+          git push origin master
