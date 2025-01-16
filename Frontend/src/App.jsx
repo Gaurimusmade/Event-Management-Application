@@ -24,7 +24,7 @@ const App = () => {
       <Footer />
       <h1>Hello Gauriiiiiiiiiii from master</h1>
       <h1>Hello 1234</h1>
-      <h1>Hellooooo</h1>
+      <h1>Helloooooooooooooooooooo</h1>
     </>
   );
 };
