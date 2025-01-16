@@ -44,8 +44,6 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-
-      # Step 6: Install Google Chrome
       - name: Install Google Chrome
         run: |
           sudo apt-get update
