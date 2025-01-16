@@ -3,7 +3,7 @@ name: CI/CD Pipeline for Smart Collect (Pull Request)
 on:
   pull_request:
     branches:
-      - master  # Trigger on PRs targeting the master branch
+      - main
     types:
       - opened
       - synchronize
